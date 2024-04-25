@@ -29,17 +29,6 @@ function Products() {
     const Loading = () => {
         return (
             <>
-                <div className="col-md-3 my-3">
-
-                    <div className="position-sticky" style={{ top: "100px" }}>
-                        <button className="btn btn-outline-dark m-1 btn-sm" onClick={() => setFilter(data)}>All</button>
-                        <button className="btn btn-outline-dark m-1 btn-sm" onClick={() => filterProduct("women's clothing")}>Women's Clothing</button>
-                        <button className="btn btn-outline-dark m-1 btn-sm" onClick={() => filterProduct("men's clothing")}>Men's Clothing</button>
-                        <button className="btn btn-outline-dark m-1 btn-sm" onClick={() => filterProduct("jewelery")}>Jewelery</button>
-                        <button className="btn btn-outline-dark m-1 btn-sm" onClick={() => filterProduct("electronics")}>Electronics</button>
-                    </div>
-
-                </div>
 
                 <div className="col-md-9 py-md-3">
                     <div className="row">
@@ -81,17 +70,6 @@ function Products() {
     const ShowProducts = () => {
         return (
             <>
-                <div className="col-md-3 my-3">
-
-                    <div className="position-sticky" style={{ top: "100px" }}>
-                        <button className="btn btn-outline-dark m-1 btn-sm" onClick={() => setFilter(data)}>All</button>
-                        <button className="btn btn-outline-dark m-1 btn-sm" onClick={() => filterProduct("women's clothing")}>Women's Clothing</button>
-                        <button className="btn btn-outline-dark m-1 btn-sm" onClick={() => filterProduct("men's clothing")}>Men's Clothing</button>
-                        <button className="btn btn-outline-dark m-1 btn-sm" onClick={() => filterProduct("jewelery")}>Jewelery</button>
-                        <button className="btn btn-outline-dark m-1 btn-sm" onClick={() => filterProduct("electronics")}>Electronics</button>
-                    </div>
-
-                </div>
 
                 <div className="col-md-9 py-md-3">
                     <div className="row">
