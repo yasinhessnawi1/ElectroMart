@@ -5,7 +5,7 @@ import Products from './components/Products';
 import Product from './components/Product';
 import Footer from './components/Footer';
 import {NavLink, Route, Routes} from 'react-router-dom';
-import Cart from './Cart';
+import Cart from './components/Cart';
 
 function App() {
   return (
