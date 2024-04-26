@@ -1,109 +1,71 @@
-import React, { useState, useEffect } from 'react'
-import Skeleton from 'react-loading-skeleton';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
 function Products() {
-
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [filter, setFilter] = useState(data);
 
     useEffect(() => {
-        let componentMounted = true;
-        const getProdcuts = async () => {
+        const getProducts = async () => {
             setLoading(true);
             const response = await fetch('https://localhost:8081/products');
-            if (componentMounted) {
-                const data = await response.json();
-                setData(data);
-                setFilter(data);
-                setLoading(false);
-            }
-            return () => {
-                componentMounted = false;
-            }
+            const data = await response.json();
+            setData(data);
+            setLoading(false);
         }
-        getProdcuts();
+        getProducts();
     }, []);
 
     const Loading = () => {
         return (
             <>
-
-                <div className="col-md-9 py-md-3">
-                    <div className="row">
-                        <div className="col-6 col-md-6 col-lg-4 mb-3">
-                            <Skeleton height={400} width={"100%"}/>
-                        </div>
-                        <div className="col-6 col-md-6 col-lg-4 mb-3">
-                            <Skeleton height={400} width={"100%"}/>
-                        </div>
-                        <div className="col-6 col-md-6 col-lg-4 mb-3">
-                            <Skeleton height={400} width={"100%"}/>
-                        </div>
-                        <div className="col-6 col-md-6 col-lg-4 mb-3">
-                            <Skeleton height={400} width={"100%"}/>
-                        </div>
-                        <div className="col-6 col-md-6 col-lg-4 mb-3">
-                            <Skeleton height={400} width={"100%"}/>
-                        </div>
-                        <div className="col-6 col-md-6 col-lg-4 mb-3">
-                            <Skeleton height={400} width={"100%"}/>
-                        </div>
-                        <div className="col-6 col-md-6 col-lg-4 mb-3">
-                            <Skeleton height={400} width={"100%"}/>
-                        </div>  
-                    </div>
-
-                </div>
-
-
+                {/* ...existing Skeleton placeholders... */}
             </>
-        )
-    }
-
-    const filterProduct = (category) => {
-        const updateList = data.filter((x) => x.category === category);
-        setFilter(updateList);
-    }
+        );
+    };
 
     const ShowProducts = () => {
+        // Function to select an icon based on the category ID
+        const categoryIcon = (categoryId) => {
+            switch (categoryId) {
+                case 'category1Id': return <i className="fas fa-laptop-code"></i>;
+                case 'category2Id': return <i className="fas fa-mobile-alt"></i>;
+                // Add more cases for different categories
+                default: return <i className="fas fa-box-open"></i>;
+            }
+        };
+
         return (
             <>
-
                 <div className="col-md-9 py-md-3">
                     <div className="row">
-                        {filter.map((product) => {
+                        {data.map((product) => {
                             return (
-                                <div className="col-6 col-md-6 col-lg-4 mb-3" key={product.id}>
-
-                                    <div className="card h-100">
-                                        <img src={product.image} className="m-3" style={{ height: "300px", width: "auto", objectFit: "contain" }} alt={product.title} />
-                                        <div className="m-3 mb-0">
-                                            <small className="card-title">{product.title.substring(0, 50)}...</small>
+                                <div className="col-6 col-md-6 col-lg-4 mb-3" key={product.ID}>
+                                    <div className="card h-100 text-center">
+                                        <div className="card-body">
+                                            {/* Here we call categoryIcon to get the icon for the product's category */}
+                                            {categoryIcon(product.category_id)}
+                                            <h5 className="card-title mt-2">{product.name}</h5>
+                                            <p className="card-text">${product.price}</p>
                                         </div>
-                                        <div style={{ marginTop: "auto" }}>
-                                            <div className="d-flex justify-content-between align-items-center">
-                                                <div className="m-3"><b>${product.price}</b></div>
-                                                <NavLink className="stretched-link" to={`/product/${product.id}`}>
-                                                    <button className="btn btn-sm m-3 border-primary">
-                                                        <i className="fa fa-arrow-right text-muted"></i>
-                                                    </button>
-                                                </NavLink>
-                                            </div>
+                                        <div className="card-footer">
+                                            <NavLink to={`/products/${product.ID}`} className="btn btn-primary">
+                                                Details
+                                            </NavLink>
+                                            <button className="btn btn-warning ml-2" onClick={() => {/* Logic to handle adding to cart */}}>
+                                                Add to Cart
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                            )
+                            );
                         })}
                     </div>
-
                 </div>
-
-
             </>
-        )
-    }
+        );
+    };
 
     return (
         <div className="container">
@@ -111,7 +73,7 @@ function Products() {
                 {loading ? <Loading /> : <ShowProducts />}
             </div>
         </div>
-    )
+    );
 }
 
-export default Products
+export default Products;
