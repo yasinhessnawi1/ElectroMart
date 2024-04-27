@@ -9,7 +9,7 @@ function ProductSearchPage() {
       <SearchResultContainer>
         {searchResults.map(product => (
           <ProductCard key={product.id}>
-            <ProductImage src={product.image || 'placeholder-image-url'} alt={product.name} />
+            <ProductImage src={product.image || process.env.PUBLIC_URL + "/banners/placeholder40.jpg"} alt={product.name} />
             <ProductInfo>
               <ProductName>{product.name}</ProductName>
               <ProductPrice>${product.price.toFixed(2)}</ProductPrice>

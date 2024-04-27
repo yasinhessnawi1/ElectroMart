@@ -115,7 +115,7 @@ function ProductPage() {
       <ProductContainer>
         {product && (
           <>
-            <ProductImage src={product.image ||  '../../public/placeholder300.jpg'} alt={product.name} />
+            <ProductImage src={product.image ||process.env.PUBLIC_URL+ "/banners/placeholder300.jpg"} alt={product.name} />
             <ProductInfo>
               <ProductName>{product.name}</ProductName>
               <ProductPrice>${product.price.toFixed(2)}</ProductPrice>

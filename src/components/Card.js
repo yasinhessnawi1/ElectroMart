@@ -54,7 +54,7 @@ function ProductCard({ product }) {
   return (
     <Link to={`/product/${product.ID}`} style={{ textDecoration: 'none', color: 'inherit' }}>
       <Card>
-        <ProductImage src={product.image || process.env.PUBLIC_URL + "placeholder150.jpg"} alt={product.name} />
+        <ProductImage src={product.image || process.env.PUBLIC_URL + "/banners/placeholder150.jpg"} alt={product.name} />
         <ProductInfo>
           <ProductName>   {product.name} </ProductName>
           <ProductPrice>${product.price.toFixed(2)}</ProductPrice>

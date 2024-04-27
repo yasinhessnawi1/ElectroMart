@@ -122,7 +122,7 @@ function CartPage() {
         {cartItems.map(item => (
           <CartItem key={item.id}>
             <ItemDetails>
-              <ItemImage src={item.image || process.env.PUBLIC_URL + 'placeholder60.jpg'} alt={item.name} />
+              <ItemImage src={item.image || process.env.PUBLIC_URL + "/banners/placeholder60.jpg"} alt={item.name} />
               <div>
                 <ItemName>{item.name}</ItemName>
                 <ItemPrice>${item.price} x {item.quantity}</ItemPrice>

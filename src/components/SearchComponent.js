@@ -108,7 +108,7 @@ function SearchComponent({ onSearch }) {
         <ResultsDropdown>
           {results.map((product) => (
             <ResultItem key={product.ID} to={`/product/${product.ID}`}>
-              <img src={product.image || process.env.PUBLIC_URL + 'placeholder40.jpg'} alt={product.name} />
+              <img src={product.image || process.env.PUBLIC_URL + '/banners/placeholder40.jpg'} alt={product.name} />
               <div>
                 <span>{product.name}</span>
                 <span className="price">${product.price.toFixed(2)}</span>

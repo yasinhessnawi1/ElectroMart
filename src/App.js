@@ -5,9 +5,8 @@ import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
 import { CartProvider } from './context/CartContext';
 import { UserProvider } from './context/UserContext';
-
-
 import { BrowserRouter as Router } from 'react-router-dom';
+
 
 function App() {
   return (
