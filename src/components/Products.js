@@ -1,82 +1,91 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import Skeleton from 'react-loading-skeleton';
+import Card from './Card';
+import { fetchProductsDetails } from '../hooks/api';
+import FilterButton from './commn/FilterButton';
+import styled from 'styled-components';
 
-function Products() {
+const CardGroup = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 0 10px;
+`;
+
+const FilterButtonContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap; // Allow the container to wrap items
+    gap: 5px;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 10px;
+    margin-bottom: 20px; // Add some margin for spacing from content below
+
+    @media (max-width: 768px) {
+        justify-content: center; // Center align on smaller screens
+        gap: 10px; // Increase gap for better touch targets on smaller screens
+    }
+`;
+
+
+function Products({ results }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState([]);
 
   useEffect(() => {
-    const getProducts = async () => {
+    if (!results || results.length === 0) {
       setLoading(true);
-      const response = await fetch('https://localhost:8081/products');
-      const data = await response.json();
-      setData(data);
+      fetchProductsDetails()
+        .then((data) => {
+          setData(data);
+          setFilter(data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log('Error fetching products:', err.message);
+          setLoading(false);
+        });
+    } else {
+      setData(results);
+      setFilter(results);
       setLoading(false);
-    };
-    getProducts();
-  }, []);
+    }
+  }, [results]);
 
-  const Loading = () => {
-    return <>{/* ...existing Skeleton placeholders... */}</>;
+  const filterProduct = (category) => {
+    const updatedList = data.filter((x) => x.category === category);
+    setFilter(updatedList);
   };
 
-  const ShowProducts = () => {
-    // Function to select an icon based on the category ID
-    const categoryIcon = (categoryId) => {
-      switch (categoryId) {
-        case 'category1Id':
-          return <i className='fas fa-laptop-code'></i>;
-        case 'category2Id':
-          return <i className='fas fa-mobile-alt'></i>;
-        // Add more cases for different categories
-        default:
-          return <i className='fas fa-box-open'></i>;
-      }
-    };
-
-    return (
-      <>
-        <div className='col-md-9 py-md-3'>
-          <div className='row'>
-            {data.map((product) => {
-              return (
-                <div className='col-6 col-md-6 col-lg-4 mb-3' key={product.ID}>
-                  <div className='card h-100 text-center'>
-                    <div className='card-body'>
-                      {/* Here we call categoryIcon to get the icon for the product's category */}
-                      {categoryIcon(product.category_id)}
-                      <h5 className='card-title mt-2'>{product.name}</h5>
-                      <p className='card-text'>${product.price}</p>
-                    </div>
-                    <div className='card-footer'>
-                      <NavLink
-                        to={`/products/${product.ID}`}
-                        className='btn btn-primary'
-                      >
-                        Details
-                      </NavLink>
-                      <button
-                        className='btn btn-warning ml-2'
-                        onClick={() => {
-                          /* Logic to handle adding to cart */
-                        }}
-                      >
-                        Add to Cart
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+  const Loading = () => (
+    <CardGroup>
+      {[1, 2, 3, 4, 5, 6].map((n) => (
+        <div key={n}>
+          <Skeleton height={300} />
         </div>
-      </>
-    );
-  };
+      ))}
+    </CardGroup>
+  );
 
   return (
-    <div className='container'>
-      <div className='row'>{loading ? <Loading /> : <ShowProducts />}</div>
+    <div>
+      <FilterButtonContainer>
+        <FilterButton onClick={() => setFilter(data)}>All</FilterButton>
+        <FilterButton onClick={() => filterProduct('Appliances')}>Appliances</FilterButton>
+        <FilterButton onClick={() => filterProduct('TV & Home Theater')}>TV & Home Theater</FilterButton>
+        <FilterButton onClick={() => filterProduct('Computers & Tablets')}>Computers & Tablets</FilterButton>
+        <FilterButton onClick={() => filterProduct('Headphones and speaker')}>Headphones and speaker</FilterButton>
+        <FilterButton onClick={() => filterProduct('Phones')}>Phones</FilterButton>
+        <FilterButton onClick={() => filterProduct('Video Games')}>Video Games</FilterButton>
+        <FilterButton onClick={() => filterProduct('Cameras')}>Cameras</FilterButton>
+      </FilterButtonContainer>
+      <CardGroup>
+        {loading ? <Loading /> : filter.map((product) => (
+          <Card key={product.ID} product={product} />
+        ))}
+      </CardGroup>
     </div>
   );
 }
