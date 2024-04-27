@@ -1,13 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client'; // Import createRoot
 import App from './App';
-import { CartProvider } from './CartContext';
+import GlobalStyles from './styles/globalStyles'; // Ensure the path is correct
 
-ReactDOM.render(
+const container = document.getElementById('root'); // Get the root element
+const root = createRoot(container); // Create a root
+
+root.render(
   <React.StrictMode>
-    <CartProvider>
-      <App />
-    </CartProvider>
-  </React.StrictMode>,
-  document.getElementById('root'),
+    <GlobalStyles />
+    <App />
+  </React.StrictMode>
 );
