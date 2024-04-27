@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "168e045c7a8f15c737f798ddfb8087ec",
+    "revision": "fd38fb08c6cdc3b8f4d2f745674c3cdf",
     "url": "/ElectroMart/index.html"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/ElectroMart/static/js/2.23efe962.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "b6d234a5cb62ade420d0",
-    "url": "/ElectroMart/static/js/main.9c6ae5cc.chunk.js"
+    "revision": "f47ce166b46fa576b40b",
+    "url": "/ElectroMart/static/js/main.c99bdaf7.chunk.js"
   },
   {
     "revision": "fb04d735386394c64c4c",
