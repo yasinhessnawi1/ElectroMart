@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 
 const ProductContainer = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     padding: 40px 20px;
     min-height: 80vh;
