@@ -6,10 +6,11 @@ import { CartContext } from '../context/CartContext';
 
 
 const Card = styled.div`
-    max-width: 300px;
     min-width: 300px;
     margin: 10px; // Keep margin constant to avoid layout shifts
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    align-self: auto;
+    align-items: center;
     border-radius: 10px;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease; // Smooth transition for hover

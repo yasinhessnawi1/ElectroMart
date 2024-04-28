@@ -98,18 +98,22 @@ const MenuItem = styled(Link)`
 
 const LogoLink = styled(Link)`
     display: flex;
+    
     align-items: center;
     text-decoration: none;
     color: inherit;
 `;
 
 const LogoImage = styled.img`
-    height: 40px;
+    width: auto;
+    height: auto;
+    max-height: 40px;
+    max-width: 40px;
 `;
 
 const LogoText = styled.div`
-    margin-left: 10px;
-    font-size: 24px;
+    margin-left: 5px;
+    font-size: medium;
     font-weight: bold;
     color: #333;
 `;
