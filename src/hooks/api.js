@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const fetchProductDetails = async (id) => {
-  const response = await fetch('http://localhost:8081/products/' + id);
+  const response = await fetch('https://electromart-server-bc815d5b516d.herokuapp.com/products/' + id);
   if (!response.ok) {
     throw new Error('An error occurred while fetching the data: ' + response.status);
   }
@@ -9,7 +9,7 @@ export const fetchProductDetails = async (id) => {
 };
 
 export const fetchProductsDetails = async () => {
-  const response = await fetch('http://localhost:8081/products');
+  const response = await fetch('https://electromart-server-bc815d5b516d.herokuapp.com/products');
   if (!response.ok) {
     throw new Error('An error occurred while fetching the data: ' + response.status);
   }
@@ -21,7 +21,7 @@ export const searchProducts = async (searchParams) => {
   try {
     // Construct query parameters from the searchParams object
     console.log(searchParams);
-    const url = `http://localhost:8081/search-products/${searchParams}`;
+    const url = `https://electromart-server-bc815d5b516d.herokuapp.com/search-products/${searchParams}`;
 
     const response = await fetch(url);
     if (!response.ok) {
@@ -36,7 +36,7 @@ export const searchProducts = async (searchParams) => {
 
 export const fetchCategories = async () => {
   try {
-    const response = await axios.get('http://localhost:8081/categories');
+    const response = await axios.get('https://electromart-server-bc815d5b516d.herokuapp.com/categories');
     return response.data;
   } catch (error) {
     console.error('Error fetching categories:', error);
@@ -45,7 +45,7 @@ export const fetchCategories = async () => {
 
 export const fetchBrands = async () => {
   try {
-    const response = await axios.get('http://localhost:8081/brand');
+    const response = await axios.get('https://electromart-server-bc815d5b516d.herokuapp.com/brand');
     return response.data;
   } catch (error) {
     console.error('Error fetching brands:', error);
