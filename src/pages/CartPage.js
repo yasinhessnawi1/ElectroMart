@@ -15,6 +15,13 @@ const CartContainer = styled.div`
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: relative; // Positioning context for absolute elements inside
 `;
+const TotalAmount = styled.p`
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 20px;
+`;
+
 
 const CartHeader = styled.h1`
     text-align: center;
@@ -105,6 +112,7 @@ function CartPage() {
   const handleDecrease = (product) => {
       updateItemQuantity(product.ID, product.quantity - 1);
   }
+  const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
   if (cartItems.length === 0) return (
     <CartContainer>
@@ -129,13 +137,16 @@ function CartPage() {
               </div>
             </ItemDetails>
             <div>
-              <IconButton onClick={() => handleIncrease(item)}><FaPlus /></IconButton>
-              <IconButton onClick={() => handleDecrease(item)}><FaMinus /></IconButton>
-              <RemoveButton onClick={() => handleRemove(item.ID)}><FaTrash /></RemoveButton>
+              <div>
+                <IconButton onClick={() => handleIncrease(item)}><FaPlus /></IconButton>
+                <IconButton onClick={() => handleDecrease(item)}><FaMinus /></IconButton>
+                <RemoveButton onClick={() => handleRemove(item.ID)}><FaTrash /></RemoveButton>
+              </div>
             </div>
           </CartItem>
         ))}
-        <CheckoutButton onClick={() => console.log('Proceed to checkout')}>Checkout</CheckoutButton>
+        <TotalAmount>Total: ${totalAmount.toFixed(2)}</TotalAmount>
+        <CheckoutButton onClick={() => alert("function coming soon ")}>Checkout</CheckoutButton>
       </CartContainer>
       <Footer />
     </>

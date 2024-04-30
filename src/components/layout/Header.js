@@ -218,6 +218,25 @@ function Header() {
       ));
     }
   };
+  const UserControls = () => {
+    const { user } = useContext(UserContext);
+
+    if (user.isLoggedIn) {
+      return (
+        <LoginContainer as={Link} to="/profile">
+          <FaUserCircle size={24} />
+          <LoginTitle>{user.username}</LoginTitle>
+        </LoginContainer>
+      );
+    } else {
+      return (
+        <LoginContainer as={Link} to="/login">
+          <FaUserCircle size={24} />
+          <LoginTitle>Login</LoginTitle>
+        </LoginContainer>
+      );
+    }
+  };
   return (
     <HeaderContainer>
       <MenuContainer onClick={toggleMenu}>
@@ -237,10 +256,7 @@ function Header() {
             <CartCount>{cartItems.reduce((total, item) => total + item.quantity, 0)}</CartCount>
           )}
         </CartLink>
-        <LoginContainer as={Link} to="/login">
-          <FaUserCircle size={24} />
-          <LoginTitle>Login</LoginTitle>
-        </LoginContainer>
+        <UserControls />
       </NavIcons>
       {menuOpen && <MenuOverlay $show={menuOpen} onClick={closeMenu} />}
       <SlideMenu $show={menuOpen}>

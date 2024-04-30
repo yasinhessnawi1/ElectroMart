@@ -9,7 +9,7 @@ const Card = styled.div`
     min-width: 300px;
     margin: 10px; // Keep margin constant to avoid layout shifts
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    align-self: auto;
+    align-self: center;
     align-items: center;
     border-radius: 10px;
     overflow: hidden;

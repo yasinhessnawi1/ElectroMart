@@ -20,7 +20,6 @@ export const fetchProductsDetails = async () => {
 export const searchProducts = async (searchParams) => {
   try {
     // Construct query parameters from the searchParams object
-    console.log(searchParams);
     const url = `https://electromart-server-bc815d5b516d.herokuapp.com/search-products/${searchParams}`;
 
     const response = await fetch(url);
@@ -39,7 +38,7 @@ export const fetchCategories = async () => {
     const response = await axios.get('https://electromart-server-bc815d5b516d.herokuapp.com/categories');
     return response.data;
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    throw error
   }
 };
 
@@ -48,6 +47,53 @@ export const fetchBrands = async () => {
     const response = await axios.get('https://electromart-server-bc815d5b516d.herokuapp.com/brand');
     return response.data;
   } catch (error) {
-    console.error('Error fetching brands:', error);
+    throw error
   }
 };
+
+export const fetchLogin = async (username, password) => {
+  try {
+    const user = JSON.stringify({ username, password });
+    console.log(user);
+    return await fetch('https://electromart-server-bc815d5b516d.herokuapp.com/login', {
+      method: 'POST',
+      body: user,
+    });
+  }catch (error) {
+    console.error('Error fetching login:', error);
+    return null;
+  }
+
+}
+export const fetchRole = async (token) => {
+  try {
+    const response = await axios.get('https://electromart-server-bc815d5b516d.herokuapp.com/protected', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.status === 200) {
+      throw new Error('An error occurred while fetching the data: ' + response.status);
+    }
+    return response.data.role;
+    } catch (error) {
+      console.error('Error fetching role:', error);
+      return null;
+    }
+  }
+
+  export const addUser = async (formData) => {
+    try {
+      console.log('Form data:', formData)
+      return await fetch ('http://localhost:8081/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+    } catch (error) {
+      throw error;
+    }
+  }

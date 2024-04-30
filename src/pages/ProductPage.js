@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 
 const ProductContainer = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     padding: 40px 20px;
     min-height: 80vh;
@@ -18,8 +18,8 @@ const ProductContainer = styled.div`
 
 const ProductImage = styled.img`
     width: 100%;
-    max-width: 500px;
-    height: auto;
+    height: 100%;
+    max-height: 500px;
     object-fit: cover;
     border-radius: 12px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
@@ -28,6 +28,7 @@ const ProductImage = styled.img`
 const ProductInfo = styled.div`
     background-color: #ffffff;
     padding: 25px;
+    align-items: center;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     width: 100%;
