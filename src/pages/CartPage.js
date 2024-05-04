@@ -75,7 +75,7 @@ const RemoveButton = styled(IconButton)`
 `;
 
 const BackLink = styled(Link)`
-  position: absolute;
+  position: inherit;
   top: 10px;
   left: 10px;
   color: #007bff; // Use a color from your palette here
