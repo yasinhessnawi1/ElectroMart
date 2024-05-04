@@ -3,24 +3,26 @@ import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
-import {
-  fetchCategoryItems,
-  fetchCategoryInfo,
-  fetchBrandInfo,
-  fetchBrandItems,
-} from '../hooks/api';
 import Card from '../components/Card';
 import Skeleton from 'react-loading-skeleton';
+import {
+  fetchBrandInfo,
+  fetchBrandItems,
+  fetchCategoryInfo,
+  fetchCategoryItems,
+} from '../hooks/api';
 
 const CategoryContainer = styled.div`
   padding: 20px;
-  background: #f5f5f5; // Subtle background color
+  background: linear-gradient(to right, #000000 55%, #324a21 100%);
+  // Black to a dark green matching your palette
   min-height: 100vh; // Full view height
 `;
+
 const CardGroup = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around; // Improved for better responsiveness
   gap: 20px;
   padding: 0 10px;
 `;
@@ -47,14 +49,13 @@ const CategoryDescription = styled.p`
 const ItemsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between; // Space items evenly
+  justify-content: space-around; // Enhance responsiveness
   gap: 20px; // Space between cards
 `;
 
-// Adding a title to the ItemsContainer for context
 const SectionTitle = styled.h3`
   font-size: 18px;
-  color: #333;
+  color: #fafafa;
   margin: 20px 0;
 `;
 
@@ -62,61 +63,57 @@ function SearchPage() {
   const { type, id } = useParams();
   const [info, setInfo] = useState({});
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
-      let infoData = {},
-        itemsData = [];
+    const fetchData = async () => {
       try {
-        setLoading(true);
+        let infoData = {},
+          itemsData = [];
         if (type === 'category') {
-          infoData = await fetchCategoryInfo(id);
-          itemsData = await fetchCategoryItems(id);
+          [infoData, itemsData] = await Promise.all([
+            fetchCategoryInfo(id),
+            fetchCategoryItems(id),
+          ]);
         } else if (type === 'brand') {
-          infoData = await fetchBrandInfo(id);
-          itemsData = await fetchBrandItems(id);
+          [infoData, itemsData] = await Promise.all([
+            fetchBrandInfo(id),
+            fetchBrandItems(id),
+          ]);
         }
-        setLoading(false);
         setInfo(infoData);
         setItems(itemsData);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
-    }
+    };
 
     fetchData();
   }, [id, type]);
-
-  const Loading = () => (
-    <CardGroup>
-      {[1, 2, 3, 4, 5, 6].map((n) => (
-        <div key={n}>
-          <Skeleton height={300} />
-        </div>
-      ))}
-    </CardGroup>
-  );
 
   return (
     <>
       <Header />
       <CategoryContainer>
         <CategoryHeader>
-          <CategoryTitle>{info.name}</CategoryTitle>
-          <CategoryDescription>{info.description}</CategoryDescription>
+          <CategoryTitle>{info.name || 'Loading...'}</CategoryTitle>
+          <CategoryDescription>
+            {info.description || 'No description available'}
+          </CategoryDescription>
         </CategoryHeader>
         <SectionTitle>Products</SectionTitle>
         <ItemsContainer>
-          <CardGroup>
-            {loading ? (
-              <Loading />
-            ) : (
-              items.map((product) => (
-                <Card key={product.ID} product={product} />
-              ))
-            )}
-          </CardGroup>
+          {loading ? (
+            <CardGroup>
+              {Array.from({ length: 6 }, (_, i) => (
+                <Skeleton key={i} height={300} />
+              ))}
+            </CardGroup>
+          ) : (
+            items.map((product) => <Card key={product.ID} product={product} />)
+          )}
         </ItemsContainer>
       </CategoryContainer>
       <Footer />

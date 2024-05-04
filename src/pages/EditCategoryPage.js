@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import {
-  PageContainer,
+  PageContainers,
   Card,
   Button,
   Modal,
   Overlay,
+  TextInfo,
 } from '../styles/StyledComponents';
 import { TextInput } from '../styles/TextInput';
 import {
@@ -16,6 +17,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
+import { toast } from 'react-toastify'; // Assuming you have toastify installed
 
 const EditCategoryPage = () => {
   const [categories, setCategories] = useState([]);
@@ -28,15 +30,21 @@ const EditCategoryPage = () => {
   }, []);
 
   const handleSelectCategory = (category) => {
-    setSelectedCategory(category);
+    setSelectedCategory({ ...category });
     setShowModal(true);
   };
 
-  const handleDelete = (id) => {
-    deleteCategory(id).then(() => {
-      setCategories(categories.filter((category) => category.ID !== id));
-      navigate('/category/edit');
-    });
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this category?')) {
+      try {
+        await deleteCategory(id);
+        setCategories(categories.filter((category) => category.ID !== id));
+        toast.success('Category deleted successfully');
+        navigate('/category/edit');
+      } catch (error) {
+        toast.error('Failed to delete category');
+      }
+    }
   };
 
   const handleAdd = () => {
@@ -45,38 +53,54 @@ const EditCategoryPage = () => {
   };
 
   const handleSave = async () => {
-    const action = selectedCategory.ID ? updateCategory : addCategory;
+    if (!selectedCategory.name.trim() || !selectedCategory.description.trim()) {
+      toast.error('Name and description are required');
+      return;
+    }
     try {
-      await action(selectedCategory, selectedCategory.ID);
-      fetchCategories().then(setCategories); // Refresh list after adding or updating
+      const method = selectedCategory.ID ? updateCategory : addCategory;
+      const updatedCategory = await method(selectedCategory);
+      const updatedCategories = selectedCategory.ID
+        ? categories.map((category) =>
+            category.ID === selectedCategory.ID ? updatedCategory : category,
+          )
+        : [...categories, updatedCategory];
+      setCategories(updatedCategories);
       setShowModal(false);
-    } catch (err) {
-      alert('Failed to save category');
+      toast.success('Category saved successfully');
+      navigate('/category/edit');
+    } catch (error) {
+      toast.error('Failed to save category');
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSelectedCategory({ ...selectedCategory, [name]: value });
+    setSelectedCategory((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
     <>
       <Header />
-      <PageContainer>
-        {categories.map((category) => (
-          <Card key={category.ID}>
-            <span>{category.name}</span>
-            <div>
-              <Button onClick={() => handleSelectCategory(category)}>
-                Edit
-              </Button>
-              <Button onClick={() => handleDelete(category.ID)}>Delete</Button>
-            </div>
-          </Card>
-        ))}
+      <PageContainers>
+        {categories.length ? (
+          categories.map((category) => (
+            <Card key={category.ID}>
+              <span>{category.name}</span>
+              <div>
+                <Button onClick={() => handleSelectCategory(category)}>
+                  Edit
+                </Button>
+                <Button onClick={() => handleDelete(category.ID)}>
+                  Delete
+                </Button>
+              </div>
+            </Card>
+          ))
+        ) : (
+          <TextInfo>No categories found. Please add some.</TextInfo>
+        )}
         <Button onClick={handleAdd}>Add New Category</Button>
-
         {showModal && (
           <Overlay onClick={() => setShowModal(false)}>
             <Modal onClick={(e) => e.stopPropagation()}>
@@ -88,6 +112,7 @@ const EditCategoryPage = () => {
               <TextInput
                 label='Category Name'
                 name='name'
+                aria-placeholder={'Enter the category name'}
                 value={selectedCategory.name}
                 onChange={handleChange}
                 placeholder='Enter the category name'
@@ -95,6 +120,7 @@ const EditCategoryPage = () => {
               <TextInput
                 label='Description'
                 name='description'
+                aria-placeholder={'Describe the category'}
                 value={selectedCategory.description}
                 onChange={handleChange}
                 placeholder='Describe the category'
@@ -103,7 +129,7 @@ const EditCategoryPage = () => {
             </Modal>
           </Overlay>
         )}
-      </PageContainer>
+      </PageContainers>
       <Footer />
     </>
   );

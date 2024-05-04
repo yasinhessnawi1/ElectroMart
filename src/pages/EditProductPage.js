@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  PageContainer,
+  PageContainers,
   Card,
   Button,
   Modal,
@@ -30,9 +30,17 @@ const EditProductPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchProductsDetails().then(setProducts);
-    fetchCategories().then(setCategories);
-    fetchBrands().then(setBrands);
+    const fetchData = async () => {
+      const [productDetails, categoriesData, brandsData] = await Promise.all([
+        fetchProductsDetails(),
+        fetchCategories(),
+        fetchBrands(),
+      ]);
+      setProducts(productDetails);
+      setCategories(categoriesData);
+      setBrands(brandsData);
+    };
+    fetchData();
   }, []);
 
   const handleSelectProduct = (product) => {
@@ -40,15 +48,18 @@ const EditProductPage = () => {
     setShowModal(true);
   };
 
-  const handleDelete = (id) => {
-    deleteProduct(id).then(() => {
+  const handleDelete = async (id) => {
+    try {
+      await deleteProduct(id);
       setProducts(products.filter((product) => product.ID !== id));
       navigate('/product/edit');
-    });
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      alert('Failed to delete product');
+    }
   };
 
   const handleAdd = () => {
-    // Set up an empty product for adding
     setSelectedProduct({
       name: '',
       description: '',
@@ -61,68 +72,41 @@ const EditProductPage = () => {
   };
 
   const handleSave = async () => {
-    let categoryId = selectedProduct.category_id;
-    let brandId = selectedProduct.brand_id;
-
-    // If the category_id is actually a name, fetch the corresponding ID
-    if (isNaN(Number(selectedProduct.category_id))) {
-      const categoryData = await fetchCategoryByName(
-        selectedProduct.category_id,
-      );
-      categoryId = categoryData ? categoryData.ID : null;
-    }
-
-    // If the brand_id is actually a name, fetch the corresponding ID
-    if (isNaN(Number(selectedProduct.brand_id))) {
-      const brandData = await fetchBrandByName(selectedProduct.brand_id);
-      brandId = brandData ? brandData.ID : null;
-    }
-
-    const productData = {
-      ...selectedProduct,
-      category_id: categoryId,
-      brand_id: brandId,
-    };
-
-    const action = selectedProduct.ID ? updateProduct : addProduct;
     try {
-      await action(
-        productData,
-        selectedProduct.ID ? selectedProduct.ID : undefined,
-      );
+      const categoryId = await fetchCategoryByName(selectedProduct.category_id);
+      const brandId = await fetchBrandByName(selectedProduct.brand_id);
+      const productData = {
+        ...selectedProduct,
+        category_id: categoryId.ID,
+        brand_id: brandId.ID,
+      };
+      const action = selectedProduct.ID ? updateProduct : addProduct;
+      const updatedProduct = await action(productData, selectedProduct.ID);
       if (selectedProduct.ID) {
         setProducts(
           products.map((product) =>
-            product.ID === selectedProduct.ID
-              ? { ...product, ...productData }
-              : product,
+            product.ID === selectedProduct.ID ? updatedProduct : product,
           ),
         );
       } else {
-        fetchProductsDetails().then(setProducts);
+        setProducts([...products, updatedProduct]);
       }
-      console.log('Product saved successfully', productData);
       setShowModal(false);
-    } catch (err) {
-      console.error('Error saving product:', err);
+    } catch (error) {
+      console.error('Error saving product:', error);
       alert('Failed to save product');
     }
   };
 
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    // Check if the input type is number, and convert the value to a number if true
-    const isNumberField = type === 'number';
-    setSelectedProduct({
-      ...selectedProduct,
-      [name]: isNumberField ? parseFloat(value) || 0 : value, // Convert to float and provide a fallback of 0
-    });
+    const { name, value } = e.target;
+    setSelectedProduct((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
     <>
       <Header />
-      <PageContainer>
+      <PageContainers>
         {products.map((product) => (
           <Card key={product.ID}>
             <span>{product.name}</span>
@@ -133,66 +117,63 @@ const EditProductPage = () => {
           </Card>
         ))}
         <Button onClick={handleAdd}>Add New Product</Button>
-
         {showModal && (
           <Overlay onClick={() => setShowModal(false)}>
             <Modal onClick={(e) => e.stopPropagation()}>
               <h3>
-                {selectedProduct && selectedProduct.ID
-                  ? 'Edit Product'
-                  : 'Add New Product'}
+                {selectedProduct?.ID ? 'Edit Product' : 'Add New Product'}
               </h3>
               <TextInput
                 label='Product Name'
                 name='name'
+                placeholder={'Enter the product name'}
                 value={selectedProduct.name}
                 onChange={handleChange}
-                placeholder='Enter product name'
               />
               <TextInput
                 label='Description'
                 name='description'
+                placeholder={'Describe the product'}
                 value={selectedProduct.description}
                 onChange={handleChange}
-                placeholder='Provide a brief description'
               />
               <TextInput
                 label='Price'
                 name='price'
+                placeholder={'Enter the price'}
                 type='number'
                 value={selectedProduct.price}
                 onChange={handleChange}
-                placeholder='Set the price'
               />
               <TextInput
                 label='Stock Quantity'
                 name='stock_quantity'
                 type='number'
+                placeholder={'Enter the stock quantity'}
                 value={selectedProduct.stock_quantity}
                 onChange={handleChange}
-                placeholder='Available stock quantity'
               />
               <SelectInput
                 label='Category'
                 name='category_id'
                 value={selectedProduct.category_id}
                 options={categories}
-                onChange={handleChange}
                 placeholder='Select a category'
+                onChange={handleChange}
               />
               <SelectInput
                 label='Brand'
                 name='brand_id'
                 value={selectedProduct.brand_id}
+                placeholder='Select a brand'
                 options={brands}
                 onChange={handleChange}
-                placeholder='Select a brand'
               />
               <Button onClick={handleSave}>Save</Button>
             </Modal>
           </Overlay>
         )}
-      </PageContainer>
+      </PageContainers>
       <Footer />
     </>
   );

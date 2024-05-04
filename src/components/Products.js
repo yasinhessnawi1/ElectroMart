@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import Skeleton from 'react-loading-skeleton';
+import styled from 'styled-components';
 import Card from './Card';
 import { fetchCategoryInfo, fetchProductsDetails } from '../hooks/api';
 import FilterButton from './commn/FilterButton';
-import styled from 'styled-components';
+import Skeleton from 'react-loading-skeleton';
 
 const CardGroup = styled.div`
   display: flex;
@@ -15,45 +15,65 @@ const CardGroup = styled.div`
 
 const FilterButtonContainer = styled.div`
   display: flex;
-  flex-wrap: wrap; // Allow the container to wrap items
+  flex-wrap: wrap;
   gap: 5px;
   flex-direction: row;
   align-items: center;
   padding: 0 10px;
-  margin-bottom: 20px; // Add some margin for spacing from content below
+  margin-bottom: 20px;
+  background: linear-gradient(
+    145deg,
+    #010101,
+    #324a21
+  ); // Gradient background from your palette
 
   @media (max-width: 768px) {
-    justify-content: center; // Center align on smaller screens
-    gap: 10px; // Increase gap for better touch targets on smaller screens
+    justify-content: center;
+    gap: 10px;
+  }
+`;
+
+// Customize FilterButton styled component here, assuming it accepts a styled prop for color
+const StyledFilterButton = styled(FilterButton)`
+  background-color: #258b76; // Aqua from your palette
+  color: #ffffff; // White text
+  &:hover {
+    background-color: #74832a; // Light green for hover from your palette
   }
 `;
 
 // eslint-disable-next-line react/prop-types
 function Products({ results }) {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const products = await fetchProductsDetails();
-        const productsWithCategory = await Promise.all(
-          products.map(async (product) => {
-            const category = await fetchCategoryInfo(product.category_id);
-            return { ...product, category };
-          }),
-        );
-        setData(productsWithCategory);
-        setFilter(productsWithCategory);
-      } catch (err) {
-        console.error('Error fetching products:', err.message);
-      } finally {
-        setLoading(false);
+      // eslint-disable-next-line react/prop-types
+      if (!results || results.length === 0) {
+        try {
+          const products = await fetchProductsDetails();
+          const productsWithCategory = await Promise.all(
+            products.map(async (product) => {
+              const category = await fetchCategoryInfo(product.category_id);
+              return { ...product, category };
+            }),
+          );
+          setData(productsWithCategory);
+          setFilter(productsWithCategory);
+        } catch (error) {
+          console.error('Error fetching products:', error);
+        }
+      } else {
+        setData(results);
+        setFilter(results);
       }
+      setLoading(false);
     };
 
     fetchData();
-  }, []);
+  }, [results]);
 
   const filterProduct = (categoryName) => {
     const filteredData = data.filter(
@@ -62,33 +82,10 @@ function Products({ results }) {
     setFilter(filteredData);
   };
 
-  useEffect(() => {
-    // eslint-disable-next-line react/prop-types
-    if (!results || results.length === 0) {
-      setLoading(true);
-      fetchProductsDetails()
-        .then((data) => {
-          setData(data);
-          setFilter(data);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.log('Error fetching products:', err.message);
-          setLoading(false);
-        });
-    } else {
-      setData(results);
-      setFilter(results);
-      setLoading(false);
-    }
-  }, [results]);
-
   const Loading = () => (
     <CardGroup>
-      {[1, 2, 3, 4, 5, 6].map((n) => (
-        <div key={n}>
-          <Skeleton height={300} />
-        </div>
+      {Array.from({ length: 6 }).map((_, index) => (
+        <Skeleton key={index} height={300} />
       ))}
     </CardGroup>
   );
@@ -96,28 +93,25 @@ function Products({ results }) {
   return (
     <div>
       <FilterButtonContainer>
-        <FilterButton onClick={() => setFilter(data)}>All</FilterButton>
-        <FilterButton onClick={() => filterProduct('Appliances')}>
-          Appliances
-        </FilterButton>
-        <FilterButton onClick={() => filterProduct('TV & Home Theater')}>
-          TV & Home Theater
-        </FilterButton>
-        <FilterButton onClick={() => filterProduct('Computers & Tablets')}>
-          Computers & Tablets
-        </FilterButton>
-        <FilterButton onClick={() => filterProduct('Headphones and speaker')}>
-          Headphones and speaker
-        </FilterButton>
-        <FilterButton onClick={() => filterProduct('Phones')}>
-          Phones
-        </FilterButton>
-        <FilterButton onClick={() => filterProduct('Video Games')}>
-          Video Games
-        </FilterButton>
-        <FilterButton onClick={() => filterProduct('Cameras')}>
-          Cameras
-        </FilterButton>
+        <StyledFilterButton onClick={() => setFilter(data)}>
+          All
+        </StyledFilterButton>
+        {[
+          'Appliances',
+          'TV & Home Theater',
+          'Computers & Tablets',
+          'Headphones and speaker',
+          'Phones',
+          'Video Games',
+          'Cameras',
+        ].map((category) => (
+          <StyledFilterButton
+            key={category}
+            onClick={() => filterProduct(category)}
+          >
+            {category}
+          </StyledFilterButton>
+        ))}
       </FilterButtonContainer>
       <CardGroup>
         {loading ? (

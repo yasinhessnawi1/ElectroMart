@@ -1,14 +1,19 @@
 import { useState, useEffect, useContext } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import { useParams } from 'react-router-dom';
 import {
+  fetchProductDetails,
   fetchBrandInfo,
   fetchCategoryInfo,
-  fetchProductDetails,
 } from '../hooks/api';
 import { CartContext } from '../context/CartContext';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
-import { useParams } from 'react-router-dom';
+
+const fadeIn = keyframes`
+    from { opacity: 0; }
+    to { opacity: 1; }
+`;
 
 const ProductContainer = styled.div`
   display: flex;
@@ -16,13 +21,12 @@ const ProductContainer = styled.div`
   align-items: center;
   padding: 40px 20px;
   min-height: 80vh;
-  background-color: #f8f9fa;
+  background: linear-gradient(to right, #000000 55%, #324a21 100%);
 `;
 
 const ProductImage = styled.img`
-  width: 100%;
-  height: 100%;
-  max-height: 500px;
+  width: 80%;
+  max-width: 500px;
   object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
@@ -31,23 +35,23 @@ const ProductImage = styled.img`
 const ProductInfo = styled.div`
   background-color: #ffffff;
   padding: 25px;
-  align-items: center;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   margin-top: 20px;
   text-align: center;
+  animation: ${fadeIn} 1s;
 `;
 
 const ProductName = styled.h1`
-  color: #333;
+  color: #324a21; // Dark green from your palette
   margin-bottom: 10px;
 `;
 
 const ProductPrice = styled.p`
   font-size: 24px;
-  color: #28a745;
+  color: #258b76; // Aqua green for vibrant look
   font-weight: bold;
 `;
 
@@ -63,7 +67,7 @@ const ProductDetails = styled.p`
 `;
 
 const AddToCartButton = styled.button`
-  background-color: #007bff;
+  background-color: #007bff; // Use a vibrant color from your palette
   color: white;
   border: none;
   border-radius: 5px;
@@ -71,19 +75,21 @@ const AddToCartButton = styled.button`
   font-size: 18px;
   cursor: pointer;
   margin-top: 20px;
-  transition: background-color 0.2s;
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; // Darker shade for hover state
   }
 `;
 
 const Message = styled.p`
-  color: #dc3545;
+  color: #dc3545; // Red for error messages
   font-size: 20px;
+  animation: ${fadeIn} 1s;
 `;
 
-// Product Page Component
 function ProductPage() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -93,37 +99,25 @@ function ProductPage() {
   const [categoryName, setCategoryName] = useState('');
   const { addToCart } = useContext(CartContext);
 
-  const handleAddToCart = (e) => {
-    e.preventDefault();
-    addToCart(product);
-  };
   useEffect(() => {
     setLoading(true);
-    fetchProductDetails(id)
-      .then(async (data) => {
-        setProduct(data);
-        const brand = await fetchBrandInfo(data.brand_id);
-        const category = await fetchCategoryInfo(data.category_id);
+    const fetchDetails = async () => {
+      try {
+        const productDetails = await fetchProductDetails(id);
+        const [brand, category] = await Promise.all([
+          fetchBrandInfo(productDetails.brand_id),
+          fetchCategoryInfo(productDetails.category_id),
+        ]);
+        setProduct(productDetails);
         setBrandName(brand.name);
         setCategoryName(category.name);
+      } catch (err) {
+        setError(`Error fetching product details: ${err.message}`);
+      } finally {
         setLoading(false);
-      })
-      .catch((err) => {
-        setError(`Error fetching product: ${err.message}`);
-        setLoading(false);
-      });
-  }, [id]);
-  useEffect(() => {
-    fetchProductDetails(id)
-      .then((data) => {
-        console.log('Product data:', data); // Check the fetched product data
-        setProduct(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(`Error fetching product: ${err.message}`);
-        setLoading(false);
-      });
+      }
+    };
+    fetchDetails();
   }, [id]);
 
   if (loading)
@@ -161,7 +155,7 @@ function ProductPage() {
               </ProductDetails>
               <ProductDetails>Brand: {brandName}</ProductDetails>
               <ProductDetails>Category: {categoryName}</ProductDetails>
-              <AddToCartButton onClick={handleAddToCart}>
+              <AddToCartButton onClick={() => addToCart(product)}>
                 Add to Cart
               </AddToCartButton>
             </ProductInfo>

@@ -5,46 +5,45 @@ import { fetchLogin, fetchRole } from '../hooks/api';
 import { UserContext } from '../context/UserContext';
 import { FaUser, FaLock, FaSpinner } from 'react-icons/fa';
 
+// Keyframes animations for effects
 const fadeIn = keyframes`
     from { opacity: 0; }
     to { opacity: 1; }
 `;
 
 const rotate = keyframes`
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 `;
 
+// Main container styling with color palette
 const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(to right, #6a11cb, #2575fc);
+  background: linear-gradient(to right, #000000 55%, #324a21 100%);
+  // Dark to aqua gradient from your palette
 `;
 
 const Card = styled.div`
   width: 90%;
   max-width: 400px;
   padding: 2rem;
-  background-color: #fff;
+  background-color: #f8f9fa; // Light grey background
   border-radius: 10px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  text-align: center; // Align text in the center for better aesthetics
+  text-align: center;
 `;
 
 const Title = styled.h2`
-  color: #333; // Choose a color that fits your brand
-  font-size: 2.5rem; // Makes the title larger
-  font-weight: 700; // Makes the font bolder
-  margin: 0 0 2rem 0; // Adds more space below the title
+  color: #324a21; // Dark green from your palette
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 2rem 0;
   text-align: center;
-  font-family: Geneva, sans-serif;
+  font-family: 'Clear Sans', sans-serif; // Replace with your chosen font
 `;
 
 const LoginForm = styled.form`
@@ -66,8 +65,10 @@ const Input = styled.input`
   width: 100%;
   border: 2px solid transparent;
   border-radius: 5px;
+  background-color: #010101; // Black background
+  color: #ffffff; // White text for contrast
   &:focus {
-    border-color: #0056b3;
+    border-color: #258b76; // Aqua border color from your palette
     outline: none;
   }
 `;
@@ -77,12 +78,12 @@ const Icon = styled.span`
   top: 50%;
   left: 10px;
   transform: translateY(-50%);
-  color: #aaa;
+  color: #ccc;
 `;
 
 const SubmitButton = styled.button`
-  background-color: #007bff;
-  color: white;
+  background-color: #258b76; // Aqua button background
+  color: #ffffff;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
@@ -92,7 +93,7 @@ const SubmitButton = styled.button`
     background-color 0.2s,
     transform 0.2s;
   &:hover {
-    background-color: #0056b3;
+    background-color: #6bfff7; // Turquoise on hover
   }
   &:active {
     transform: scale(0.98);
@@ -109,7 +110,7 @@ const Spinner = styled(FaSpinner)`
 `;
 
 const SignUpLink = styled(Link)`
-  color: #007bff;
+  color: #258b76; // Aqua from your palette
   text-decoration: none;
   margin-top: 1rem;
   &:hover {
@@ -174,7 +175,7 @@ function LoginPage() {
             />
           </InputGroup>
           {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-          <SubmitButton to='/ElektroMart' type='submit'>
+          <SubmitButton type='submit'>
             {loading ? <Spinner /> : 'Login'}
           </SubmitButton>
           <SignUpLink to='/signup'>Not a user? Sign up here!</SignUpLink>

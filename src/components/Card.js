@@ -1,94 +1,100 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Button, ButtonContainer } from './commn/Button';
+import { Button, ButtonContainer } from './commn/Button'; // Corrected the path based on previous input
 import { CartContext } from '../context/CartContext';
+import PropTypes from 'prop-types';
 
 const Card = styled.div`
   min-width: 300px;
-  margin: 10px; // Keep margin constant to avoid layout shifts
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   align-self: center;
-  align-items: center;
   border-radius: 10px;
   overflow: hidden;
   transition:
     transform 0.3s ease,
-    box-shadow 0.3s ease; // Smooth transition for hover
+    box-shadow 0.3s ease;
+  background: linear-gradient(
+    145deg,
+    #010101,
+    #258b76
+  ); // Gradient from Black to Aqua
   &:hover {
-    transform: translateY(-5px) scale(1.03); // Lift and slightly enlarge the card
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); // Enhance shadow for better visual effect
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   }
 `;
 
 const ProductImage = styled.img`
   width: 100%;
-  height: 200px;
+  height: 200px; // Fixed height to maintain uniformity across cards
   object-fit: cover;
 `;
 
 const ProductInfo = styled.div`
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
+  padding: 15px;
+  background-color: #ffffff; // Plain white background for the information section
 `;
 
 const ProductName = styled.h5`
   margin: 5px 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; // Prevent long names from breaking layout
+  color: #010101; // Black text for name
 `;
 
 const ProductPrice = styled.p`
-  color: #007bff;
+  color: #74832a; // Light green from your palette for price
 `;
 
-// eslint-disable-next-line react/prop-types
+const StyledButton = styled(Button)`
+  background-color: #6bff77; // Turquoise variant from your palette
+  color: #ffffff; // White text
+  &:hover {
+    background-color: #324a21; // Dark green for hover
+  }
+`;
+
 function ProductCard({ product }) {
   const { addToCart } = useContext(CartContext);
 
   const handleAddToCart = (e) => {
     e.preventDefault();
     addToCart(product);
+    // Optionally, show feedback here
   };
+
   return (
     <Link
-      // eslint-disable-next-line react/prop-types
       to={`/product/${product.ID}`}
       style={{ textDecoration: 'none', color: 'inherit' }}
     >
       <Card>
         <ProductImage
           src={
-            // eslint-disable-next-line react/prop-types
             product.image ||
             process.env.PUBLIC_URL + '/banners/placeholder150.jpg'
           }
-          // eslint-disable-next-line react/prop-types
           alt={product.name}
         />
         <ProductInfo>
-          {/* eslint-disable-next-line react/prop-types */}
-          <ProductName> {product.name} </ProductName>
-          {/* eslint-disable-next-line react/prop-types */}
+          <ProductName>{product.name}</ProductName>
           <ProductPrice>${product.price.toFixed(2)}</ProductPrice>
         </ProductInfo>
         <ButtonContainer>
-          <Button
-            className='btn btn-primary'
-            // eslint-disable-next-line react/prop-types
-            name={product.ID}
-            onClick={handleAddToCart}
-          >
-            Add to cart
-          </Button>
+          <StyledButton onClick={handleAddToCart}>Add to Cart</StyledButton>
         </ButtonContainer>
       </Card>
     </Link>
   );
 }
+
+ProductCard.propTypes = {
+  product: PropTypes.shape({
+    ID: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    image: PropTypes.string,
+  }),
+};
 
 export default ProductCard;

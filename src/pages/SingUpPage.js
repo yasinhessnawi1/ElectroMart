@@ -28,7 +28,7 @@ const LoginContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(to right, #6a11cb, #2575fc);
+  background: linear-gradient(to right, #000000 55%, #324a21 100%);
 `;
 
 const Card = styled.div`
