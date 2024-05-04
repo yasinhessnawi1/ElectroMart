@@ -50,8 +50,8 @@ const EditProductPage = () => {
     setSelectedProduct({
       name: '',
       description: '',
-      price: 0.0,
-      stock_quantity: 0,
+      price: '',
+      stock_quantity: '',
       category_id: '',
       brand_id: '',
     });
@@ -136,19 +136,21 @@ const EditProductPage = () => {
             <h3>
               {selectedProduct && selectedProduct.ID
                 ? 'Edit Product'
-                : 'Add Product'}
+                : 'Add New Product'}
             </h3>
             <TextInput
               label='Product Name'
               name='name'
               value={selectedProduct.name}
               onChange={handleChange}
+              placeholder='Enter product name'
             />
             <TextInput
               label='Description'
               name='description'
               value={selectedProduct.description}
               onChange={handleChange}
+              placeholder='Provide a brief description'
             />
             <TextInput
               label='Price'
@@ -156,6 +158,7 @@ const EditProductPage = () => {
               type='number'
               value={selectedProduct.price}
               onChange={handleChange}
+              placeholder='Set the price'
             />
             <TextInput
               label='Stock Quantity'
@@ -163,6 +166,7 @@ const EditProductPage = () => {
               type='number'
               value={selectedProduct.stock_quantity}
               onChange={handleChange}
+              placeholder='Available stock quantity'
             />
             <SelectInput
               label='Category'
@@ -170,6 +174,7 @@ const EditProductPage = () => {
               value={selectedProduct.category_id}
               options={categories}
               onChange={handleChange}
+              placeholder='Select a category'
             />
             <SelectInput
               label='Brand'
@@ -177,6 +182,7 @@ const EditProductPage = () => {
               value={selectedProduct.brand_id}
               options={brands}
               onChange={handleChange}
+              placeholder='Select a brand'
             />
             <Button onClick={handleSave}>Save</Button>
           </Modal>

@@ -258,6 +258,7 @@ export const deleteProduct = async (id) => {
   );
 };
 export const addCategory = async (categoryData) => {
+  console.log(categoryData);
   return await axios.post(
     'https://electromart-server-bc815d5b516d.herokuapp.com/categories',
     categoryData,
