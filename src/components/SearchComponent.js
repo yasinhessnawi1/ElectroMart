@@ -117,7 +117,7 @@ function SearchComponent() {
               />
               <div>
                 <span>{product.name}</span>
-                <span className='price'>${product.price.toFixed(2)}</span>
+                <span className='price'>${product.price}</span>
               </div>
             </ResultItem>
           ))}

@@ -11,6 +11,7 @@ import SignUpPage from './pages/SingUpPage';
 import SearchPage from './pages/SearchPage';
 import AboutPage from './pages/AboutPage';
 import ProfilePage from './pages/ProfilePage';
+import EditProductPage from './pages/EditProductPage';
 
 function App() {
   React.useEffect(() => {
@@ -29,6 +30,7 @@ function App() {
             <Route path='/search/:type/:id' element={<SearchPage />} />
             <Route path='/about' element={<AboutPage />} />
             <Route path='/profile' element={<ProfilePage />} />
+            <Route path='/product/edit' element={<EditProductPage />} />
             <Route path='*' element={<h1>404 Not Found</h1>} />
           </Routes>
         </Router>

@@ -38,18 +38,31 @@ export const fetchProductsDetails = async () => {
 };
 
 export const searchProducts = async (searchParams) => {
-  try {
-    // Construct query parameters from the searchParams object
-    const url = `https://electromart-server-bc815d5b516d.herokuapp.com/search-products/${searchParams}`;
+  const url3 = `https://electromart-server-bc815d5b516d.herokuapp.com/search-products/?name=${encodeURIComponent(searchParams)}`;
+  const url = `https://electromart-server-bc815d5b516d.herokuapp.com/search-products/?brand_name=${encodeURIComponent(searchParams)}`;
+  const url1 = `https://electromart-server-bc815d5b516d.herokuapp.com/search-products/?category_name=${encodeURIComponent(searchParams)}`;
+  const url2 = `https://electromart-server-bc815d5b516d.herokuapp.com/search-products/?description=${encodeURIComponent(searchParams)}`;
+  const urls = [url, url1, url2, url3];
 
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
-    }
-    return await response.json();
+  const requests = urls.map((url) =>
+    fetch(url).then((response) => (response.ok ? response.json() : [])),
+  );
+
+  try {
+    const results = await Promise.all(requests);
+    const data = results.flat();
+
+    // Deduplicate data by ID using a Map
+    const uniqueProducts = new Map();
+    data.forEach((product) => {
+      uniqueProducts.set(product.ID, product);
+    });
+
+    // Convert the Map values back to an array
+    return Array.from(uniqueProducts.values()).reverse();
   } catch (error) {
-    console.error('There was a problem with the fetch operation:', error);
-    throw error;
+    console.error('Error fetching products:', error);
+    return []; // Return an empty array in case of error
   }
 };
 
@@ -103,6 +116,20 @@ export const fetchUser = async (username) => {
     console.error('Error fetching role:', error);
     return null;
   }
+};
+
+export const fetchCategoryByName = async (name) => {
+  const response = await fetch(
+    `https://electromart-server-bc815d5b516d.herokuapp.com/search-categories/?name=${encodeURIComponent(name)}`,
+  );
+  return await response.json(); // Assuming the API returns an array with the matching category as the first element
+};
+
+export const fetchBrandByName = async (name) => {
+  const response = await fetch(
+    `https://electromart-server-bc815d5b516d.herokuapp.com/search-brands/?name=${encodeURIComponent(name)}`,
+  );
+  return await response.json(); // Assuming the API returns an array with the matching brand as the first element
 };
 export const fetchRole = async (token) => {
   try {
@@ -195,4 +222,76 @@ export const fetchBrandInfo = async (id) => {
     console.error('There was a problem with the fetch operation:', error);
     throw error;
   }
+};
+export const addProduct = async (productData) => {
+  return await fetch(
+    'https://electromart-server-bc815d5b516d.herokuapp.com/products',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(productData),
+    },
+  );
+};
+
+export const updateProduct = async (productData, id) => {
+  return await fetch(
+    `https://electromart-server-bc815d5b516d.herokuapp.com/products/${id}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(productData),
+    },
+  );
+};
+
+export const deleteProduct = async (id) => {
+  return await fetch(
+    `https://electromart-server-bc815d5b516d.herokuapp.com/products/${id}`,
+    {
+      method: 'DELETE',
+    },
+  );
+};
+export const addCategory = async (categoryData) => {
+  return await axios.post(
+    'https://electromart-server-bc815d5b516d.herokuapp.com/categories',
+    categoryData,
+  );
+};
+
+export const updateCategory = async (categoryData, id) => {
+  return await axios.put(
+    `https://electromart-server-bc815d5b516d.herokuapp.com/categories/${id}`,
+    categoryData,
+  );
+};
+
+export const deleteCategory = async (id) => {
+  return await axios.delete(
+    `https://electromart-server-bc815d5b516d.herokuapp.com/categories/${id}`,
+  );
+};
+export const addBrand = async (brandData) => {
+  return await axios.post(
+    'https://electromart-server-bc815d5b516d.herokuapp.com/brand',
+    brandData,
+  );
+};
+
+export const updateBrand = async (brandData, id) => {
+  return await axios.put(
+    `https://electromart-server-bc815d5b516d.herokuapp.com/brand/${id}`,
+    brandData,
+  );
+};
+
+export const deleteBrand = async (id) => {
+  return await axios.delete(
+    `https://electromart-server-bc815d5b516d.herokuapp.com/brand/${id}`,
+  );
 };
