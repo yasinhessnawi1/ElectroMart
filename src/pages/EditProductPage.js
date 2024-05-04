@@ -18,6 +18,8 @@ import {
   fetchCategoryByName,
 } from '../hooks/api';
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/layout/Header';
+import Footer from '../components/layout/Footer';
 
 const EditProductPage = () => {
   const [products, setProducts] = useState([]);
@@ -118,77 +120,81 @@ const EditProductPage = () => {
   };
 
   return (
-    <PageContainer>
-      {products.map((product) => (
-        <Card key={product.ID}>
-          <span>{product.name}</span>
-          <div>
-            <Button onClick={() => handleSelectProduct(product)}>Edit</Button>
-            <Button onClick={() => handleDelete(product.ID)}>Delete</Button>
-          </div>
-        </Card>
-      ))}
-      <Button onClick={handleAdd}>Add New Product</Button>
+    <>
+      <Header />
+      <PageContainer>
+        {products.map((product) => (
+          <Card key={product.ID}>
+            <span>{product.name}</span>
+            <div>
+              <Button onClick={() => handleSelectProduct(product)}>Edit</Button>
+              <Button onClick={() => handleDelete(product.ID)}>Delete</Button>
+            </div>
+          </Card>
+        ))}
+        <Button onClick={handleAdd}>Add New Product</Button>
 
-      {showModal && (
-        <Overlay onClick={() => setShowModal(false)}>
-          <Modal onClick={(e) => e.stopPropagation()}>
-            <h3>
-              {selectedProduct && selectedProduct.ID
-                ? 'Edit Product'
-                : 'Add New Product'}
-            </h3>
-            <TextInput
-              label='Product Name'
-              name='name'
-              value={selectedProduct.name}
-              onChange={handleChange}
-              placeholder='Enter product name'
-            />
-            <TextInput
-              label='Description'
-              name='description'
-              value={selectedProduct.description}
-              onChange={handleChange}
-              placeholder='Provide a brief description'
-            />
-            <TextInput
-              label='Price'
-              name='price'
-              type='number'
-              value={selectedProduct.price}
-              onChange={handleChange}
-              placeholder='Set the price'
-            />
-            <TextInput
-              label='Stock Quantity'
-              name='stock_quantity'
-              type='number'
-              value={selectedProduct.stock_quantity}
-              onChange={handleChange}
-              placeholder='Available stock quantity'
-            />
-            <SelectInput
-              label='Category'
-              name='category_id'
-              value={selectedProduct.category_id}
-              options={categories}
-              onChange={handleChange}
-              placeholder='Select a category'
-            />
-            <SelectInput
-              label='Brand'
-              name='brand_id'
-              value={selectedProduct.brand_id}
-              options={brands}
-              onChange={handleChange}
-              placeholder='Select a brand'
-            />
-            <Button onClick={handleSave}>Save</Button>
-          </Modal>
-        </Overlay>
-      )}
-    </PageContainer>
+        {showModal && (
+          <Overlay onClick={() => setShowModal(false)}>
+            <Modal onClick={(e) => e.stopPropagation()}>
+              <h3>
+                {selectedProduct && selectedProduct.ID
+                  ? 'Edit Product'
+                  : 'Add New Product'}
+              </h3>
+              <TextInput
+                label='Product Name'
+                name='name'
+                value={selectedProduct.name}
+                onChange={handleChange}
+                placeholder='Enter product name'
+              />
+              <TextInput
+                label='Description'
+                name='description'
+                value={selectedProduct.description}
+                onChange={handleChange}
+                placeholder='Provide a brief description'
+              />
+              <TextInput
+                label='Price'
+                name='price'
+                type='number'
+                value={selectedProduct.price}
+                onChange={handleChange}
+                placeholder='Set the price'
+              />
+              <TextInput
+                label='Stock Quantity'
+                name='stock_quantity'
+                type='number'
+                value={selectedProduct.stock_quantity}
+                onChange={handleChange}
+                placeholder='Available stock quantity'
+              />
+              <SelectInput
+                label='Category'
+                name='category_id'
+                value={selectedProduct.category_id}
+                options={categories}
+                onChange={handleChange}
+                placeholder='Select a category'
+              />
+              <SelectInput
+                label='Brand'
+                name='brand_id'
+                value={selectedProduct.brand_id}
+                options={brands}
+                onChange={handleChange}
+                placeholder='Select a brand'
+              />
+              <Button onClick={handleSave}>Save</Button>
+            </Modal>
+          </Overlay>
+        )}
+      </PageContainer>
+      <Footer />
+    </>
   );
 };
 

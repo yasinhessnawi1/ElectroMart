@@ -324,7 +324,6 @@ function Header() {
   };
 
   const handleNavigatingToProfile = () => {
-    console.log('profile clicked');
     navigate('/profile');
   };
 

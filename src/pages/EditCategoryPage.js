@@ -14,6 +14,8 @@ import {
   addCategory,
 } from '../hooks/api';
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/layout/Header';
+import Footer from '../components/layout/Footer';
 
 const EditCategoryPage = () => {
   const [categories, setCategories] = useState([]);
@@ -59,45 +61,51 @@ const EditCategoryPage = () => {
   };
 
   return (
-    <PageContainer>
-      {categories.map((category) => (
-        <Card key={category.ID}>
-          <span>{category.name}</span>
-          <div>
-            <Button onClick={() => handleSelectCategory(category)}>Edit</Button>
-            <Button onClick={() => handleDelete(category.ID)}>Delete</Button>
-          </div>
-        </Card>
-      ))}
-      <Button onClick={handleAdd}>Add New Category</Button>
+    <>
+      <Header />
+      <PageContainer>
+        {categories.map((category) => (
+          <Card key={category.ID}>
+            <span>{category.name}</span>
+            <div>
+              <Button onClick={() => handleSelectCategory(category)}>
+                Edit
+              </Button>
+              <Button onClick={() => handleDelete(category.ID)}>Delete</Button>
+            </div>
+          </Card>
+        ))}
+        <Button onClick={handleAdd}>Add New Category</Button>
 
-      {showModal && (
-        <Overlay onClick={() => setShowModal(false)}>
-          <Modal onClick={(e) => e.stopPropagation()}>
-            <h3>
-              {selectedCategory && selectedCategory.ID
-                ? 'Edit Category'
-                : 'Add New Category'}
-            </h3>
-            <TextInput
-              label='Category Name'
-              name='name'
-              value={selectedCategory.name}
-              onChange={handleChange}
-              placeholder='Enter the category name'
-            />
-            <TextInput
-              label='Description'
-              name='description'
-              value={selectedCategory.description}
-              onChange={handleChange}
-              placeholder='Describe the category'
-            />
-            <Button onClick={handleSave}>Save</Button>
-          </Modal>
-        </Overlay>
-      )}
-    </PageContainer>
+        {showModal && (
+          <Overlay onClick={() => setShowModal(false)}>
+            <Modal onClick={(e) => e.stopPropagation()}>
+              <h3>
+                {selectedCategory && selectedCategory.ID
+                  ? 'Edit Category'
+                  : 'Add New Category'}
+              </h3>
+              <TextInput
+                label='Category Name'
+                name='name'
+                value={selectedCategory.name}
+                onChange={handleChange}
+                placeholder='Enter the category name'
+              />
+              <TextInput
+                label='Description'
+                name='description'
+                value={selectedCategory.description}
+                onChange={handleChange}
+                placeholder='Describe the category'
+              />
+              <Button onClick={handleSave}>Save</Button>
+            </Modal>
+          </Overlay>
+        )}
+      </PageContainer>
+      <Footer />
+    </>
   );
 };
 

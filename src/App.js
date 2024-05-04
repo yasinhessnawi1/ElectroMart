@@ -13,6 +13,7 @@ import AboutPage from './pages/AboutPage';
 import ProfilePage from './pages/ProfilePage';
 import EditProductPage from './pages/EditProductPage';
 import EditCategoryPage from './pages/EditCategoryPage';
+import EditBrandPage from './pages/EditBrandPage';
 
 function App() {
   React.useEffect(() => {
@@ -33,6 +34,7 @@ function App() {
             <Route path='/profile' element={<ProfilePage />} />
             <Route path='/product/edit' element={<EditProductPage />} />
             <Route path='/category/edit' element={<EditCategoryPage />} />
+            <Route path='/brand/edit' element={<EditBrandPage />} />
             <Route path='*' element={<h1>404 Not Found</h1>} />
           </Routes>
         </Router>
