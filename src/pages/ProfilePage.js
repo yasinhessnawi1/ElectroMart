@@ -138,12 +138,14 @@ function ProfilePage() {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const [formData, setFormData] = useState({
-    username: user.username,
-    email: user.email,
     first_name: user.first_name,
     last_name: user.last_name,
+    username: user.username,
+    email: user.email,
+    mobile: user.mobile,
     address: user.address,
     password: '',
+    id: user.id,
   });
   const [editMode, setEditMode] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -152,11 +154,12 @@ function ProfilePage() {
   useEffect(() => {
     if (user) {
       setFormData({
-        username: user.username,
-        email: user.email,
-        first_name: user.first_name,
         last_name: user.last_name,
         address: user.address,
+        username: user.username,
+        email: user.email,
+        mobile: user.mobile,
+        first_name: user.first_name,
         password: '',
       });
     }
@@ -176,7 +179,7 @@ function ProfilePage() {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await updateUser(user.id, formData);
+      const response = await updateUser(formData, user.id);
       if (response.ok) {
         alert('Profile updated successfully');
         setEditMode(false);
@@ -235,6 +238,14 @@ function ProfilePage() {
               {' '}
               <UserData>
                 {' '}
+                <strong>First Name:</strong> {formData.first_name}{' '}
+              </UserData>{' '}
+              <UserData>
+                {' '}
+                <strong>Last Name:</strong> {formData.last_name}{' '}
+              </UserData>{' '}
+              <UserData>
+                {' '}
                 <strong>Username:</strong> {formData.username}{' '}
               </UserData>{' '}
               <UserData>
@@ -243,11 +254,7 @@ function ProfilePage() {
               </UserData>{' '}
               <UserData>
                 {' '}
-                <strong>First Name:</strong> {formData.first_name}{' '}
-              </UserData>{' '}
-              <UserData>
-                {' '}
-                <strong>Last Name:</strong> {formData.last_name}{' '}
+                <strong>Mobile number:</strong> {formData.mobile}{' '}
               </UserData>{' '}
               <UserData>
                 {' '}

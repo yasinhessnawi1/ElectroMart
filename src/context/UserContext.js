@@ -21,6 +21,7 @@ export const UserProvider = ({ children }) => {
     const last_name = localStorage.getItem('last_name');
     const address = localStorage.getItem('address');
     const id = localStorage.getItem('id');
+    const mobile = localStorage.getItem('mobile');
 
     if (token && username && role) {
       setUser({
@@ -32,6 +33,7 @@ export const UserProvider = ({ children }) => {
         last_name,
         address,
         id,
+        mobile,
       });
     }
   }, []);
@@ -52,12 +54,16 @@ export const UserProvider = ({ children }) => {
           first_name: data.first_name,
           last_name: data.last_name,
           address: data.address,
+          mobile: data.mobile,
+          id: data.ID,
         });
         localStorage.setItem('role', data.role);
         localStorage.setItem('email', data.email);
         localStorage.setItem('first_name', data.first_name);
         localStorage.setItem('last_name', data.last_name);
         localStorage.setItem('address', data.address);
+        localStorage.setItem('mobile', data.mobile);
+        localStorage.setItem('id', data.ID);
       } else {
         console.error('Failed to fetch user details');
       }
@@ -71,6 +77,12 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     localStorage.removeItem('role');
+    localStorage.removeItem('email');
+    localStorage.removeItem('first_name');
+    localStorage.removeItem('last_name');
+    localStorage.removeItem('address');
+    localStorage.removeItem('mobile');
+    localStorage.removeItem('id');
     setUser({ isLoggedIn: false, username: '', role: 'guest' });
   };
 
