@@ -1,20 +1,11 @@
 {
   "files": {
-    "main.js": "/ElectroMart/static/js/main.01bfab87.chunk.js",
-    "main.js.map": "/ElectroMart/static/js/main.01bfab87.chunk.js.map",
-    "runtime-main.js": "/ElectroMart/static/js/runtime-main.b4901f6a.js",
-    "runtime-main.js.map": "/ElectroMart/static/js/runtime-main.b4901f6a.js.map",
-    "static/js/2.f40a6b94.chunk.js": "/ElectroMart/static/js/2.f40a6b94.chunk.js",
-    "static/js/2.f40a6b94.chunk.js.map": "/ElectroMart/static/js/2.f40a6b94.chunk.js.map",
+    "main.js": "/ElectroMart/static/js/main.075a39ae.js",
+    "static/media/logo.png": "/ElectroMart/static/media/logo.9a2a04d2ff99cf91af68.png",
     "index.html": "/ElectroMart/index.html",
-    "precache-manifest.65328e0dca50eee6ecb914ad3dfc6bec.js": "/ElectroMart/precache-manifest.65328e0dca50eee6ecb914ad3dfc6bec.js",
-    "service-worker.js": "/ElectroMart/service-worker.js",
-    "static/js/2.f40a6b94.chunk.js.LICENSE.txt": "/ElectroMart/static/js/2.f40a6b94.chunk.js.LICENSE.txt",
-    "static/media/logo.png": "/ElectroMart/static/media/logo.f04ee572.png"
+    "main.075a39ae.js.map": "/ElectroMart/static/js/main.075a39ae.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.b4901f6a.js",
-    "static/js/2.f40a6b94.chunk.js",
-    "static/js/main.01bfab87.chunk.js"
+    "static/js/main.075a39ae.js"
   ]
 }
