@@ -54,8 +54,6 @@ const GlobalStyles = createGlobalStyle`
             opacity: 0.7; // Visually indicate if a button is disabled
         }
     }
-    .padding { padding: 1em; }
-    .margin { margin: 1em; }
 `;
 
 export default GlobalStyles;

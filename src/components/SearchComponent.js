@@ -1,35 +1,35 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { searchProducts } from '../hooks/api';
 import { Link } from 'react-router-dom';
 
 const SearchContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-    margin: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  margin: 20px;
 `;
 
 const SearchInput = styled.input`
-    padding: 8px 15px;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 10px;
+  padding: 8px 15px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
 `;
 
 const SearchButton = styled.button`
-    padding: 8px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 8px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 
-    &:hover {
-        background-color: #0056b3;
-    }
+  &:hover {
+    background-color: #0056b3;
+  }
 `;
 
 const ResultsDropdown = styled.div`
@@ -77,7 +77,7 @@ const ResultItem = styled(Link)`
   }
 `;
 
-function SearchComponent({ onSearch }) {
+function SearchComponent() {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
 
@@ -97,8 +97,8 @@ function SearchComponent({ onSearch }) {
   return (
     <SearchContainer>
       <SearchInput
-        type="text"
-        placeholder="Search products..."
+        type='text'
+        placeholder='Search products...'
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         onKeyUp={handleSearch} // Trigger search on key up
@@ -108,10 +108,16 @@ function SearchComponent({ onSearch }) {
         <ResultsDropdown>
           {results.map((product) => (
             <ResultItem key={product.ID} to={`/product/${product.ID}`}>
-              <img src={product.image || process.env.PUBLIC_URL + '/banners/placeholder40.jpg'} alt={product.name} />
+              <img
+                src={
+                  product.image ||
+                  process.env.PUBLIC_URL + '/banners/placeholder40.jpg'
+                }
+                alt={product.name}
+              />
               <div>
                 <span>{product.name}</span>
-                <span className="price">${product.price.toFixed(2)}</span>
+                <span className='price'>${product.price.toFixed(2)}</span>
               </div>
             </ResultItem>
           ))}
