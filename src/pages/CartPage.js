@@ -10,21 +10,22 @@ const CartContainer = styled.div`
   width: 80%;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #f8f9fa;
+  background: #324a21;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  position: relative; // Positioning context for absolute elements inside
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 `;
+
 const TotalAmount = styled.p`
   font-size: 1.5rem;
   font-weight: bold;
   text-align: right;
   margin-top: 20px;
+  color: #fdfdfd; // Light green from your palette
 `;
 
 const CartHeader = styled.h1`
   text-align: center;
-  color: #333;
+  color: #f9faf9; // Dark green from your palette
 `;
 
 const CartItem = styled.div`
@@ -32,7 +33,7 @@ const CartItem = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #ccc; // Consider a color from your palette if applicable
 `;
 
 const ItemDetails = styled.div`
@@ -50,39 +51,39 @@ const ItemImage = styled.img`
 
 const ItemName = styled.h4`
   font-size: 1.2rem;
-  color: #555;
+  color: #fafafa; // Mid-tone gray, consider adjusting
 `;
 
 const ItemPrice = styled.p`
-  color: #666;
+  color: #f8f7f7; // Lighter gray, adjust to fit your palette
 `;
 
 const IconButton = styled.button`
   background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 24px; // Bigger icon for better interaction
-  color: #007bff;
+  font-size: 24px; // Larger icon for better interaction
+  color: #007bff; // Use a color from your palette here
 
   &:hover {
-    color: #0056b3;
+    color: #0056b3; // Consider a hover state from your palette
   }
 `;
 
 const RemoveButton = styled(IconButton)`
-  color: red; // Red color specifically for remove action
+  color: #dc3545; // Consider adjusting to a palette color
 `;
 
 const BackLink = styled(Link)`
   position: absolute;
   top: 10px;
   left: 10px;
-  color: #007bff;
+  color: #007bff; // Use a color from your palette here
   font-size: 24px;
 `;
 
 const CheckoutButton = styled.button`
-  background-color: #28a745;
+  background-color: #258b76; // Aqua background from your palette
   color: white;
   border: none;
   padding: 10px 20px;
@@ -93,7 +94,7 @@ const CheckoutButton = styled.button`
   font-size: 18px;
 
   &:hover {
-    background-color: #218838;
+    background-color: #6bfff7; // Turquoise on hover from your palette
   }
 `;
 
@@ -101,23 +102,17 @@ function CartPage() {
   const { cartItems, addToCart, removeFromCart, updateItemQuantity } =
     useContext(CartContext);
 
-  const handleRemove = (id) => {
-    removeFromCart(id);
-  };
-
-  const handleIncrease = (product) => {
-    addToCart(product);
-  };
-
-  const handleDecrease = (product) => {
+  const handleRemove = (id) => removeFromCart(id);
+  const handleIncrease = (product) => addToCart(product);
+  const handleDecrease = (product) =>
     updateItemQuantity(product.ID, product.quantity - 1);
-  };
+
   const totalAmount = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0,
   );
 
-  if (cartItems.length === 0)
+  if (cartItems.length === 0) {
     return (
       <CartContainer>
         <BackLink to='/'>
@@ -126,6 +121,7 @@ function CartPage() {
         <p>Your cart is empty.</p>
       </CartContainer>
     );
+  }
 
   return (
     <>
@@ -153,22 +149,20 @@ function CartPage() {
               </div>
             </ItemDetails>
             <div>
-              <div>
-                <IconButton onClick={() => handleIncrease(item)}>
-                  <FaPlus />
-                </IconButton>
-                <IconButton onClick={() => handleDecrease(item)}>
-                  <FaMinus />
-                </IconButton>
-                <RemoveButton onClick={() => handleRemove(item.ID)}>
-                  <FaTrash />
-                </RemoveButton>
-              </div>
+              <IconButton onClick={() => handleIncrease(item)}>
+                <FaPlus />
+              </IconButton>
+              <IconButton onClick={() => handleDecrease(item)}>
+                <FaMinus />
+              </IconButton>
+              <RemoveButton onClick={() => handleRemove(item.ID)}>
+                <FaTrash />
+              </RemoveButton>
             </div>
           </CartItem>
         ))}
         <TotalAmount>Total: ${totalAmount.toFixed(2)}</TotalAmount>
-        <CheckoutButton onClick={() => alert('function coming soon ')}>
+        <CheckoutButton onClick={() => alert('Checkout function coming soon')}>
           Checkout
         </CheckoutButton>
       </CartContainer>

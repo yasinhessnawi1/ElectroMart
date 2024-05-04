@@ -1,11 +1,11 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaBars, FaShoppingCart, FaTimes, FaUserCircle } from 'react-icons/fa';
 import { CartContext } from '../../context/CartContext';
 import { UserContext } from '../../context/UserContext';
 import { fetchBrands, fetchCategories } from '../../hooks/api';
-import logoImage from '../../assets/logo.png'; // Verify the path is correct
+import logoImage from '../../assets/logo.png'; // Ensure path is correct
 
 const MenuContainer = styled.div`
   display: flex;
@@ -19,7 +19,11 @@ const SlideMenu = styled.div`
   left: 0;
   width: 250px;
   height: 100%;
-  background: #f7f7f7;
+  background: linear-gradient(
+    to bottom,
+    #010101,
+    #324a21 85%
+  ); // Black to Green gradient
   box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
   transform: translateX(${(props) => (props.$show ? '0' : '-100%')});
   transition: transform 0.3s ease-in-out;
@@ -89,7 +93,9 @@ const CartCount = styled.span`
 `;
 
 const HeaderContainer = styled.header`
-  background-color: #fff;
+  background: linear-gradient(to right, #010101, #258b76); // Corrected property
+  // Black to Aqua gradient
+  color: white; // Changed to white for better readability
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 0 20px;
   display: flex;
@@ -98,6 +104,18 @@ const HeaderContainer = styled.header`
   height: 60px;
   z-index: 1000;
 `;
+
+// Theme for styled components
+const theme = {
+  colors: {
+    background: '#010101',
+    text: '#ffffff',
+    hover: {
+      background: '#6bfff7', // Turquoise for hover backgrounds
+      text: '#000',
+    },
+  },
+};
 
 const MenuOverlay = styled.div`
   position: fixed;
@@ -114,12 +132,12 @@ const MenuOverlay = styled.div`
 const MenuItem = styled(Link)`
   padding: 12px 16px;
   font-size: 16px;
-  color: #333;
+  color: white; // Changed to white for better visibility
   text-decoration: none;
   border-bottom: 1px solid #eaeaea;
 
   &:hover {
-    background-color: #eaeaea;
+    background-color: #fafb63; // Yellow for hover
     color: #000;
   }
 `;
@@ -142,7 +160,7 @@ const LogoText = styled.div`
   margin-left: 5px;
   font-size: medium;
   font-weight: bold;
-  color: #333;
+  color: #ffffff; // Changed to white for better visibility
 `;
 
 const MenuButton = styled.div`
@@ -156,7 +174,7 @@ const MenuButton = styled.div`
     display: block;
     width: 25px;
     height: 3px;
-    background-color: #333;
+    background-color: #ffffff; // Changed to white for better visibility
     transition: background-color 0.2s;
   }
 
@@ -170,7 +188,7 @@ const MenuButton = styled.div`
 const MenuTitle = styled.span`
   margin-left: 10px;
   font-size: 16px;
-  color: #333;
+  color: #ffffff; // Changed to white for better visibility
 `;
 
 const NavIcons = styled.div`
@@ -179,6 +197,7 @@ const NavIcons = styled.div`
   gap: 20px;
 `;
 
+// Main function definition and other logic remain unchanged
 function Header() {
   const { cartItems } = useContext(CartContext);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -359,31 +378,33 @@ function Header() {
   };
 
   return (
-    <HeaderContainer>
-      <MenuContainer onClick={toggleMenu}>
-        <MenuButton title='Menu'>
-          {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-        </MenuButton>
-        <MenuTitle>Menu</MenuTitle>
-      </MenuContainer>
-      <LogoLink to='/'>
-        <LogoImage src={logoImage} alt='Logo' />
-        <LogoText>ElectroMart</LogoText>
-      </LogoLink>
-      <NavIcons>
-        <CartLink to='/cart'>
-          <FaShoppingCart size={24} />
-          {cartItems.length > 0 && (
-            <CartCount>
-              {cartItems.reduce((total, item) => total + item.quantity, 0)}
-            </CartCount>
-          )}
-        </CartLink>
-        <UserControls />
-      </NavIcons>
-      {menuOpen && <MenuOverlay $show={menuOpen} onClick={closeMenu} />}
-      <SlideMenu $show={menuOpen}>{renderMenuItems()}</SlideMenu>
-    </HeaderContainer>
+    <ThemeProvider theme={theme}>
+      <HeaderContainer>
+        <MenuContainer onClick={toggleMenu}>
+          <MenuButton title='Menu'>
+            {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+          </MenuButton>
+          <MenuTitle>Menu</MenuTitle>
+        </MenuContainer>
+        <LogoLink to='/'>
+          <LogoImage src={logoImage} alt='Logo' />
+          <LogoText>ElectroMart</LogoText>
+        </LogoLink>
+        <NavIcons>
+          <CartLink to='/cart'>
+            <FaShoppingCart size={24} />
+            {cartItems.length > 0 && (
+              <CartCount>
+                {cartItems.reduce((total, item) => total + item.quantity, 0)}
+              </CartCount>
+            )}
+          </CartLink>
+          <UserControls />
+        </NavIcons>
+        {menuOpen && <MenuOverlay $show={menuOpen} onClick={closeMenu} />}
+        <SlideMenu $show={menuOpen}>{renderMenuItems()}</SlideMenu>
+      </HeaderContainer>
+    </ThemeProvider>
   );
 }
 

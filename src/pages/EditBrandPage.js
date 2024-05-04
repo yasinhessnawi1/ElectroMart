@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import {
-  PageContainer,
+  PageContainers,
   Card,
   Button,
   Modal,
   Overlay,
+  TextInfo, // Assuming you have a styled component for informational text
 } from '../styles/StyledComponents';
 import { TextInput } from '../styles/TextInput';
 import { fetchBrands, updateBrand, deleteBrand, addBrand } from '../hooks/api';
@@ -27,26 +28,33 @@ const EditBrandPage = () => {
     setShowModal(true);
   };
 
-  const handleDelete = (id) => {
-    deleteBrand(id).then(() => {
+  const handleDelete = async (id) => {
+    try {
+      await deleteBrand(id);
       setBrands(brands.filter((brand) => brand.ID !== id));
       navigate('/brand/edit');
-    });
+    } catch (error) {
+      console.error('Error deleting brand:', error);
+      alert('Failed to delete brand');
+    }
   };
 
   const handleAdd = () => {
-    setSelectedBrand({
-      name: '',
-      description: '',
-    });
+    setSelectedBrand({ name: '', description: '' });
     setShowModal(true);
   };
 
   const handleSave = async () => {
     const action = selectedBrand.ID ? updateBrand : addBrand;
     try {
-      await action(selectedBrand, selectedBrand.ID);
-      fetchBrands().then(setBrands); // Refresh list after adding or updating
+      const updatedBrand = await action(selectedBrand);
+      if (!selectedBrand.ID) {
+        setBrands([...brands, updatedBrand]);
+      } else {
+        setBrands(
+          brands.map((b) => (b.ID === selectedBrand.ID ? updatedBrand : b)),
+        );
+      }
       setShowModal(false);
     } catch (err) {
       console.error('Error saving brand:', err);
@@ -65,16 +73,22 @@ const EditBrandPage = () => {
   return (
     <>
       <Header />
-      <PageContainer>
-        {brands.map((brand) => (
-          <Card key={brand.ID}>
-            <span>{brand.name}</span>
-            <div>
-              <Button onClick={() => handleSelectBrand(brand)}>Edit</Button>
-              <Button onClick={() => handleDelete(brand.ID)}>Delete</Button>
-            </div>
-          </Card>
-        ))}
+      <PageContainers>
+        {brands.length ? (
+          brands.map((brand) => (
+            <Card key={brand.ID}>
+              <span>{brand.name}</span>
+              <div>
+                <Button onClick={() => handleSelectBrand(brand)}>Edit</Button>
+                <Button onClick={() => handleDelete(brand.ID)}>Delete</Button>
+              </div>
+            </Card>
+          ))
+        ) : (
+          <TextInfo>
+            No brands available. Click Add New Brand to create one.
+          </TextInfo>
+        )}
         <Button onClick={handleAdd}>Add New Brand</Button>
 
         {showModal && (
@@ -103,7 +117,7 @@ const EditBrandPage = () => {
             </Modal>
           </Overlay>
         )}
-      </PageContainer>
+      </PageContainers>
       <Footer />
     </>
   );
