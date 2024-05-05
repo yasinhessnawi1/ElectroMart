@@ -55,8 +55,8 @@ const StyledButton = styled(Button)`
 `;
 
 function ProductCard({ product }) {
+  console.log(product.image);
   const { addToCart } = useContext(CartContext);
-
   const handleAddToCart = (e) => {
     e.preventDefault();
     addToCart(product);
@@ -74,6 +74,7 @@ function ProductCard({ product }) {
             product.image ||
             process.env.PUBLIC_URL + '/banners/placeholder150.jpg'
           }
+          style={{ maxHeight: '150px', maxWidth: '300px' }}
           alt={product.name}
         />
         <ProductInfo>

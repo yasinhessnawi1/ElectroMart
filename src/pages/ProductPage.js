@@ -144,6 +144,7 @@ function ProductPage() {
                 product.image ||
                 process.env.PUBLIC_URL + '/banners/placeholder300.jpg'
               }
+              style={{ maxHeight: 'inherit', maxWidth: 'inherit' }}
               alt={product.name}
             />
             <ProductInfo>

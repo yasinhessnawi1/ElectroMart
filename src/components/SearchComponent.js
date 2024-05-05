@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { debounce } from 'lodash'; // Import debounce from lodash for optimized searching
 import { useState, useEffect, useRef } from 'react';
 
-// Styled components enhanced with your color palette
 const SearchContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -155,6 +154,7 @@ function SearchComponent() {
                   product.image ||
                   process.env.PUBLIC_URL + '/banners/placeholder40.jpg'
                 }
+                style={{ maxHeight: 'inherit', maxWidth: 'inherit' }}
                 alt={product.name}
               />
               <div>

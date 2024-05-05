@@ -43,7 +43,7 @@ const ItemDetails = styled.div`
 
 const ItemImage = styled.img`
   width: 60px;
-  height: 60px;
+  height: 50px;
   object-fit: cover;
   margin-right: 10px;
   border-radius: 5px;

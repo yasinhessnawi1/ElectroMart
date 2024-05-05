@@ -13,30 +13,6 @@ export const updateUser = async (formData, id) => {
   );
 };
 
-export const fetchProductDetails = async (id) => {
-  const response = await fetch(
-    'https://electromart-server-bc815d5b516d.herokuapp.com/products/' + id,
-  );
-  if (!response.ok) {
-    throw new Error(
-      'An error occurred while fetching the data: ' + response.status,
-    );
-  }
-  return response.json();
-};
-
-export const fetchProductsDetails = async () => {
-  const response = await fetch(
-    'https://electromart-server-bc815d5b516d.herokuapp.com/products',
-  );
-  if (!response.ok) {
-    throw new Error(
-      'An error occurred while fetching the data: ' + response.status,
-    );
-  }
-  return response.json();
-};
-
 export const searchProducts = async (searchParams) => {
   const url3 = `https://electromart-server-bc815d5b516d.herokuapp.com/search-products/?name=${encodeURIComponent(searchParams)}`;
   const url = `https://electromart-server-bc815d5b516d.herokuapp.com/search-products/?brand_name=${encodeURIComponent(searchParams)}`;
@@ -53,16 +29,18 @@ export const searchProducts = async (searchParams) => {
     const data = results.flat();
 
     // Deduplicate data by ID using a Map
-    const uniqueProducts = new Map();
+    let uniqueProducts = new Map();
     data.forEach((product) => {
+      console.log('Product name:', product.name); // Log product name
+      product.image = process.env.PUBLIC_URL + `/products/${product.name}.webp`; // Add image URL
+      console.log('Image URL:', product.image); // Log image URL
       uniqueProducts.set(product.ID, product);
     });
 
-    // Convert the Map values back to an array
     return Array.from(uniqueProducts.values()).reverse();
   } catch (error) {
     console.error('Error fetching products:', error);
-    return []; // Return an empty array in case of error
+    return [];
   }
 };
 
@@ -187,7 +165,11 @@ export const fetchCategoryItems = async (id) => {
     if (!response.ok) {
       throw new Error('Network response was not ok ' + response.statusText);
     }
-    return await response.json();
+    const products = await response.json();
+    products.forEach((product) => {
+      product.image = process.env.PUBLIC_URL + `/products/${product.name}.webp`;
+    });
+    return products;
   } catch (error) {
     console.error('There was a problem with the fetch operation:', error);
     throw error;
@@ -204,7 +186,11 @@ export const fetchBrandItems = async (id) => {
     if (!response.ok) {
       throw new Error('Network response was not ok ' + response.statusText);
     }
-    return await response.json();
+    const products = await response.json();
+    products.forEach((product) => {
+      product.image = process.env.PUBLIC_URL + `/products/${product.name}.webp`;
+    });
+    return products;
   } catch (error) {
     console.error('There was a problem with the fetch operation:', error);
     throw error;
@@ -234,6 +220,35 @@ export const addProduct = async (productData) => {
       body: JSON.stringify(productData),
     },
   );
+};
+export const fetchProductDetails = async (id) => {
+  const response = await fetch(
+    'https://electromart-server-bc815d5b516d.herokuapp.com/products/' + id,
+  );
+  if (!response.ok) {
+    throw new Error(
+      'An error occurred while fetching the data: ' + response.status,
+    );
+  }
+  const product = await response.json();
+  product.image = process.env.PUBLIC_URL + `/products/${product.name}.webp`; // Add image URL
+  return product;
+};
+
+export const fetchProductsDetails = async () => {
+  const response = await fetch(
+    'https://electromart-server-bc815d5b516d.herokuapp.com/products',
+  );
+  if (!response.ok) {
+    throw new Error(
+      'An error occurred while fetching the data: ' + response.status,
+    );
+  }
+  const products = await response.json();
+  products.forEach((product) => {
+    product.image = process.env.PUBLIC_URL + `/products/${product.name}.webp`; // Add image URL
+  });
+  return products;
 };
 
 export const updateProduct = async (productData, id) => {
