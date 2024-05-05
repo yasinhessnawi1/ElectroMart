@@ -34,6 +34,9 @@ const cartReducer = (state, action) => {
           ? { ...item, quantity: action.payload.quantity }
           : item,
       );
+    case 'CLEAR_CART':
+      // Clear the cart
+      return [];
 
     default:
       return state;
@@ -68,9 +71,19 @@ export function CartProvider({ children }) {
     });
   };
 
+  const clearCart = () => {
+    dispatch({ type: 'CLEAR_CART' });
+  };
+
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, updateItemQuantity }}
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        updateItemQuantity,
+        clearCart,
+      }}
     >
       {children}
     </CartContext.Provider>

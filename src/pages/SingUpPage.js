@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaLock, FaEnvelope, FaHome, FaSpinner } from 'react-icons/fa';
+import {
+  FaUser,
+  FaLock,
+  FaEnvelope,
+  FaHome,
+  FaSpinner,
+  FaPhone,
+} from 'react-icons/fa';
 import { addUser } from '../hooks/api';
 
 const fadeIn = keyframes`
@@ -122,6 +129,7 @@ function SignUpPage() {
     first_name: '',
     last_name: '',
     address: '',
+    mobile: '',
   });
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -201,6 +209,20 @@ function SignUpPage() {
               required
             />
           </InputGroup>
+          <InputGroup>
+            <Icon>
+              <FaPhone />
+            </Icon>
+            <Input
+              name='mobile'
+              type='number'
+              placeholder='Phone number'
+              value={formData.mobile}
+              onChange={handleChange}
+              required
+            />
+          </InputGroup>
+
           <InputGroup>
             <Icon>
               <FaUser />
