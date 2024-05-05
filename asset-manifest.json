@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.js": "/ElectroMart/static/js/main.51ee0716.js",
+    "main.js": "/ElectroMart/static/js/main.d0fccb72.js",
     "static/media/logo.png": "/ElectroMart/static/media/logo.9a2a04d2ff99cf91af68.png",
     "index.html": "/ElectroMart/index.html",
-    "main.51ee0716.js.map": "/ElectroMart/static/js/main.51ee0716.js.map"
+    "main.d0fccb72.js.map": "/ElectroMart/static/js/main.d0fccb72.js.map"
   },
   "entrypoints": [
-    "static/js/main.51ee0716.js"
+    "static/js/main.d0fccb72.js"
   ]
 }
